@@ -1,0 +1,25 @@
+{
+  "name": "franjmr-newman",
+  "version": "1.0.0",
+  "description": "",
+  "main": "init.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "newman": "^5.3.2",
+    "newman-reporter-junitfull": "^1.1.1"
+  },
+  "scripts": {
+    "tests:postman": "newman run postman_collection.json",
+    "tests:postman:junit": "npm run tests:postman -- -r junit --reporter-junit-export ./junit/junit.xml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/franjmr/newman.git"
+  },
+  "keywords": [
+    "franjmr/newman"
+  ],
+  "author": "franjmr",
+  "license": "ISC"
+}
