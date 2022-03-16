@@ -10,7 +10,7 @@ npm install
 ```
 ## Reporters
 - Terminal console: Default
-- [newman-reporter-junitfull](https://www.npmjs.com/package/newman-reporter-junitfull):JUnit reporter for Newman that provides the information about the collection run in JUnit format. 
+- Junit: Use [newman-reporter-junitfull](https://www.npmjs.com/package/newman-reporter-junitfull) as JUnit reporter for Newman that provides the information about the collection run in JUnit format. 
 ## Execute Postman collection
 
 ```bash
