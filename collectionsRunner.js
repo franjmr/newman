@@ -69,7 +69,7 @@ const findFileByExtension = function(folderPath, fileExtension) {
 }
 
 /**
- * Run all Newman collections from a path
+ * Run all postman collections in a directory
  * @param {string} collectionPath 
  */
 const newmanRunAllCollections = async function(collectionPath, reportersDefault){
