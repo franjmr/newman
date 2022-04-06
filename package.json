@@ -1,7 +1,7 @@
 {
   "name": "franjmr-newman",
   "version": "1.0.1",
-  "description": "Franjmr - Newman Runner",
+  "description": "Postman Collections Runner",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
