@@ -1,25 +1,30 @@
 {
   "name": "franjmr-newman",
-  "version": "1.0.0",
-  "description": "",
-  "main": "init.js",
-  "dependencies": {
-  },
+  "version": "1.0.1",
+  "description": "Franjmr - Newman Runner",
+  "main": "index.js",
+  "dependencies": {},
   "devDependencies": {
-    "newman": "^5.3.2",
-    "newman-reporter-junitfull": "^1.1.1"
+    "cross-env": "^7.0.3",
+    "newman": "^5.3.2"
   },
   "scripts": {
-    "tests:postman": "newman run postman_collection.json",
-    "tests:postman:junit": "npm run tests:postman -- -r junit --reporter-junit-export ./junit/junit.xml"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/franjmr/newman.git"
+    "test:examples:cli": "newman run collections/examples/test.script.examples.postman_collection.json",
+    "test:examples:junit": "newman run collections/examples/test.script.examples.postman_collection.json --reporters junit --reporter-junit-export junit/junit.xml",
+    "test:collections:all": "node collectionsRunner.js",
+    "test:collections:all:multireport": "cross-env REPORTERS=cli,junit node collectionsRunner.js",
+    "test:collections:examples": "cross-env COLLECTION_DIR=examples node collectionsRunner.js",
+    "test:collections:examples:junit": "cross-env COLLECTION_DIR=examples REPORTERS=junit node collectionsRunner.js",
+    "test:collections:examples:cli": "cross-env COLLECTION_DIR=examples REPORTERS=cli node collectionsRunner.js",
+    "test:collections:examples:multireport": "cross-env COLLECTION_DIR=examples REPORTERS=cli,junit node collectionsRunner.js"
   },
   "keywords": [
     "franjmr/newman"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/franjmr/newman.git"
+  },
   "author": "franjmr",
   "license": "ISC"
 }

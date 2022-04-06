@@ -1,0 +1,707 @@
+{
+	"info": {
+		"_postman_id": "046fae79-6947-43be-a351-c4ee329eb515",
+		"name": "Test script examples",
+		"description": "From the Postman Docs: [Test script examples](https://learning.postman.com/docs/writing-scripts/script-references/test-examples/)\n\n> Read the documentation on the right side of each request. Look under the **Tests** tab of the request to see the test script examples. Hit **Send**, and inspect the **Test Results** on the bottom.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Getting started with tests",
+			"item": [
+				{
+					"name": "Getting started with tests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/get",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"get"
+							]
+						},
+						"description": "To try writing a test script for the first time, open a request in your Postman app and open the **Tests** tab. Enter the following JavaScript code:\n\n```\npm.test(\"Status code is 200\", function () {\n  pm.response.to.have.status(200);\n});\n```\n\nThis code uses the `pm` library to run the `test` method. The text string will appear in the test output. The function inside the test represents an assertion. Postman tests can use [Chai Assertion Library BDD](https://www.chaijs.com/api/bdd/) syntax, which provides options to optimize how readable your tests are to you and your collaborators. In this case, the code uses BDD chains `to.have` to express the assertion.\n\nThis test checks the response code returned by the API. If the response code is `200`, the test will pass, otherwise it will fail. Click **Send** and check the **Test Results** output in the response area.\n\nTry changing the status code in the assertion code and running again to see how test results appear differently when they pass or fail.\n\nYou can structure your test assertions in a variety of ways to suit your logic and preference in terms of how you want the results to output. The following code is an alternative way of achieving the same test as the one above using the `expect` syntax:\n\n```\npm.test(\"Status code is 200\", () => {\n  pm.expect(pm.response.code).to.eql(200);\n});\n```\n> Refer to the [Chai Docs](https://www.chaijs.com/api/bdd/) for a complete overview of assertion syntax options."
+					},
+					"response": []
+				},
+				{
+					"name": "Using multiple assertions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The response has all properties\", () => {\r",
+									"    //parse the response json and test three properties\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.form.type).to.eql('vip');\r",
+									"    pm.expect(responseJson.form.name).to.be.a('string');\r",
+									"    pm.expect(responseJson.form.id).to.have.lengthOf(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Melania Trump",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "vip",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://postman-echo.com/post",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "Your tests can include multiple assertions as part of a single test—you can use this to group together related assertions.\n\n```\npm.test(\"The response has all properties\", () => {\n    //parse the response json and test three properties\n    const responseJson = pm.response.json();\n    pm.expect(responseJson.type).to.eql('vip');\n    pm.expect(responseJson.name).to.be.a('string');\n    pm.expect(responseJson.id).to.have.lengthOf(1);\n});\n```\n\nIf any of the contained assertions fails, the test as a whole will fail. All assertions must be successful for the test to pass."
+					},
+					"response": []
+				},
+				{
+					"name": "Parsing response body data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"// see examples of parsing other data in the documentation"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/get",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"get"
+							]
+						},
+						"description": "In order to carry out assertions on your responses, you will first need to parse the data into a JavaScript object that your assertions can use.\n\nTo parse JSON data, use the following syntax:\n```\nconst responseJson = pm.response.json();\n```\n\nTo parse XML, use the following:\n```\nconst responseJson = xml2Json(pm.response.text());\n```\n> If you're dealing with complex XML responses you may find [console logging](https://learning.postman.com/docs/sending-requests/troubleshooting-api-requests/#using-the-console) useful.\n\nTo parse CSV, use the [CSV parse](https://github.com/adaltas/node-csv-parse) utility:\n```\nconst parse = require('csv-parse/lib/sync');\nconst responseJson = parse(pm.response.text());\n```\n\nTo parse HTML, you can use [cheerio](https://cheerio.js.org/):\n```\nconst $ = cheerio.load(pm.response.text());\n//output the html for testing\nconsole.log($.html());\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Handling responses that don't parse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Body contains string\",() => {\r",
+									"  pm.expect(pm.response.text()).to.include(\"customer_id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/get?customer_id=6",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"get"
+							],
+							"query": [
+								{
+									"key": "customer_id",
+									"value": "6"
+								}
+							]
+						},
+						"description": "If you cannot parse the response body to JavaScript because it's not formatted as JSON, XML, HTML, CSV, or any other parsable data format, you can still make assertions on the data.\n\nYou can test if the response body contains a string:\n\n```\npm.test(\"Body contains string\",() => {\n  pm.expect(pm.response.text()).to.include(\"customer_id\");\n});\n```\n\nThis does not tell you where the string was encountered because it carries out the test on the whole response body. You can also test if a response matches a string (which will typically only be effective with short responses):\n\n```\npm.test(\"Body is string\", function () {\n  pm.response.to.have.body(\"whole-body-text\");\n});\n```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Making assertions on the HTTP response",
+			"item": [
+				{
+					"name": "Testing response body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Person is Jane\", () => {\r",
+									"  const responseJson = pm.response.json();\r",
+									"  pm.expect(responseJson.form.name).to.eql(\"Jane\");\r",
+									"  pm.expect(responseJson.form.age).to.eql('21');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Jane",
+									"type": "text"
+								},
+								{
+									"key": "age",
+									"value": "21",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://postman-echo.com/post",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "You can check for particular values in the response body:\n\n```\npm.test(\"Person is Jane\", () => {\n  const responseJson = pm.response.json();\n  pm.expect(responseJson.form.name).to.eql(\"Jane\");\n  pm.expect(responseJson.form.age).to.eql(23);\n});\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Testing status codes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has string\", () => {\r",
+									"  pm.response.to.have.status(\"OK\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/post",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "You can test for the response status code:\n\n```\npm.test(\"Status code is 201\", () => {\n  pm.response.to.have.status(201);\n});\n```\n\nIf you want to test for the status code being one of a set, you can include them all in an array and use `oneOf`:\n\n```\npm.test(\"Successful POST request\", () => {\n  pm.expect(pm.response.code).to.be.oneOf([201,202]);\n});\n```\n\nYou can also check the status code text:\n\n```\npm.test(\"Status code name has string\", () => {\n  pm.response.to.have.status(\"Created\");\n});\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Testing headers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type header is present\", () => {\r",
+									"  pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/post",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "You can check that a response header is present:\n\n```\npm.test(\"Content-Type header is present\", () => {\n  pm.response.to.have.header(\"Content-Type\");\n});\n```\n\nYou can also test for a response header having a particular value:\n\n```\npm.test(\"Content-Type header is application/json\", () => {\n  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\n});\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Testing cookies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Cookie JSESSIONID is present\", () => {\r",
+									"  pm.expect(pm.cookies.has('JSESSIONID')).to.be.false;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cookie isLoggedIn has value 1\", () => {\r",
+									"  pm.expect(pm.cookies.get('isLoggedIn')).to.be.undefined;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/post",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "You can test whether a cookie is present in the response:\n\n```\npm.test(\"Cookie JSESSIONID is present\", () => {\n  pm.expect(pm.cookies.has('JSESSIONID')).to.be.true;\n});\n```\n\nYou can also test for a particular cookie value:\n\n\n```\npm.test(\"Cookie isLoggedIn has value 1\", () => {\n  pm.expect(pm.cookies.get('isLoggedIn')).to.eql('1');\n});\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Testing response times",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/post",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "You can test for the response time to be within a specified range:\n\n\n```\npm.test(\"Response time is less than 200ms\", () => {\n  pm.expect(pm.response.responseTime).to.be.below(200);\n});\n```"
+					},
+					"response": []
+				}
+			],
+			"description": "Your tests can check various aspects of a request response, including the body, status codes, headers, cookies, response times, and more."
+		},
+		{
+			"name": "Common assertion examples",
+			"item": [
+				{
+					"name": "Asserting a response value against a variable",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response property matches environment variable\", function () {\r",
+									"  pm.expect(pm.response.json().name).to.eql(pm.environment.get(\"name\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/get",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"get"
+							]
+						},
+						"description": "You can check whether a response property has the same value as a variable (in this case an environment variable).\n\n```\npm.test(\"Response property matches environment variable\", function () {\n  pm.expect(pm.response.json().name).to.eql(pm.environment.get(\"name\"));\n});\n```\n\n> See [Using Variables](https://learning.postman.com/docs/sending-requests/variables/) for an overview of operations you can use to manipulate variables in your scripts."
+					},
+					"response": []
+				},
+				{
+					"name": "Asserting a value type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/* response has this structure:\r",
+									"{\r",
+									"  \"name\": \"Jane\",\r",
+									"  \"age\": 29,\r",
+									"  \"hobbies\": [\r",
+									"    \"skating\",\r",
+									"    \"painting\"\r",
+									"  ],\r",
+									"  \"email\": null\r",
+									"}\r",
+									"*/\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.test(\"Test data type of the response\", () => {\r",
+									"  pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  pm.expect(jsonData.name).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.age).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.hobbies).to.be.an(\"array\");\r",
+									"  pm.expect(jsonData.website).to.be.undefined;\r",
+									"  pm.expect(jsonData.email).to.be.null;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{mockBaseUrl}}/jane",
+							"host": [
+								"{{mockBaseUrl}}"
+							],
+							"path": [
+								"jane"
+							]
+						},
+						"description": "You can test the type of any part of the response.\n\n```\n/* response has this structure:\n{\n  \"name\": \"Jane\",\n  \"age\": 29,\n  \"hobbies\": [\n    \"skating\",\n    \"painting\"\n  ],\n  \"email\": null\n}\n*/\nconst jsonData = pm.response.json();\npm.test(\"Test data type of the response\", () => {\n  pm.expect(jsonData).to.be.an(\"object\");\n  pm.expect(jsonData.name).to.be.a(\"string\");\n  pm.expect(jsonData.age).to.be.a(\"number\");\n  pm.expect(jsonData.hobbies).to.be.an(\"array\");\n  pm.expect(jsonData.website).to.be.undefined;\n  pm.expect(jsonData.email).to.be.null;\n});\n```"
+					},
+					"response": [
+						{
+							"name": "Asserting a value type",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{mockBaseUrl}}/jane",
+									"host": [
+										"{{mockBaseUrl}}"
+									],
+									"path": [
+										"jane"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\r\n  \"name\": \"Jane\",\r\n  \"age\": 29,\r\n  \"hobbies\": [\r\n    \"skating\",\r\n    \"painting\"\r\n  ],\r\n  \"email\": null\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Asserting array properties",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									"response has this structure:\r",
+									"{\r",
+									"  \"errors\": [],\r",
+									"  \"areas\": [ \"goods\", \"services\" ],\r",
+									"  \"settings\": [\r",
+									"    {\r",
+									"      \"type\": \"notification\",\r",
+									"      \"detail\": [ \"email\", \"sms\" ]\r",
+									"    },\r",
+									"    {\r",
+									"      \"type\": \"visual\",\r",
+									"      \"detail\": [ \"light\", \"large\" ]\r",
+									"    }\r",
+									"  ]\r",
+									"}\r",
+									"*/\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.test(\"Test array properties\", () => {\r",
+									"    //errors array is empty\r",
+									"  pm.expect(jsonData.errors).to.be.empty;\r",
+									"    //areas includes \"goods\"\r",
+									"  pm.expect(jsonData.areas).to.include(\"goods\");\r",
+									"    //get the notification settings object\r",
+									"  const notificationSettings = jsonData.settings.find\r",
+									"      (m => m.type === \"notification\");\r",
+									"  pm.expect(notificationSettings)\r",
+									"    .to.be.an(\"object\", \"Could not find the setting\");\r",
+									"    //detail array should include \"sms\"\r",
+									"\r",
+									"pm.expect(notificationSettings.detail).to.include(\"sms\");\r",
+									"    //detail array should include all listed\r",
+									"  pm.expect(notificationSettings.detail)\r",
+									"    .to.have.members([\"email\", \"sms\"]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{mockBaseUrl}}/goods",
+							"host": [
+								"{{mockBaseUrl}}"
+							],
+							"path": [
+								"goods"
+							]
+						},
+						"description": "You can check whether an array is empty or not, and whether it contains particular items.\n\n```\n/*\nresponse has this structure:\n{\n  \"errors\": [],\n  \"areas\": [ \"goods\", \"services\" ],\n  \"settings\": [\n    {\n      \"type\": \"notification\",\n      \"detail\": [ \"email\", \"sms\" ]\n    },\n    {\n      \"type\": \"visual\",\n      \"detail\": [ \"light\", \"large\" ]\n    }\n  ]\n}\n*/\n\nconst jsonData = pm.response.json();\npm.test(\"Test array properties\", () => {\n    //errors array is empty\n  pm.expect(jsonData.errors).to.be.empty;\n    //areas includes \"goods\"\n  pm.expect(jsonData.areas).to.include(\"goods\");\n    //get the notification settings object\n  const notificationSettings = jsonData.settings.find\n      (m => m.type === \"notification\");\n  pm.expect(notificationSettings)\n    .to.be.an(\"object\", \"Could not find the setting\");\n    //detail array should include \"sms\"\n\npm.expect(notificationSettings.detail).to.include(\"sms\");\n    //detail array should include all listed\n  pm.expect(notificationSettings.detail)\n    .to.have.members([\"email\", \"sms\"]);\n});\n```\n\n> The order in `.members` does not affect the test."
+					},
+					"response": [
+						{
+							"name": "Asserting array properties",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{mockBaseUrl}}/goods",
+									"host": [
+										"{{mockBaseUrl}}"
+									],
+									"path": [
+										"goods"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\r\n  \"errors\": [],\r\n  \"areas\": [ \"goods\", \"services\" ],\r\n  \"settings\": [\r\n    {\r\n      \"type\": \"notification\",\r\n      \"detail\": [ \"email\", \"sms\" ]\r\n    },\r\n    {\r\n      \"type\": \"visual\",\r\n      \"detail\": [ \"light\", \"large\" ]\r\n    }\r\n  ]\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Asserting object properties",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.expect({a: 1, b: 2}).to.have.all.keys('a', 'b');\r",
+									"pm.expect({a: 1, b: 2}).to.have.any.keys('a', 'b');\r",
+									"pm.expect({a: 1, b: 2}).to.not.have.any.keys('c', 'd');\r",
+									"pm.expect({a: 1}).to.have.property('a');\r",
+									"pm.expect({a: 1, b: 2}).to.be.an('object')\r",
+									"  .that.has.all.keys('a', 'b');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/get",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"get"
+							]
+						},
+						"description": "You can assert that an object contains keys or properties.\n\n```\npm.expect({a: 1, b: 2}).to.have.all.keys('a', 'b');\npm.expect({a: 1, b: 2}).to.have.any.keys('a', 'b');\npm.expect({a: 1, b: 2}).to.not.have.any.keys('c', 'd');\npm.expect({a: 1}).to.have.property('a');\npm.expect({a: 1, b: 2}).to.be.an('object')\n  .that.has.all.keys('a', 'b');\n```\n\n> Target can be an `object`, `set`, `array` or `map`. If `.keys` is run without `.all` or `.any`, the expression defaults to `.all`. As `.keys` behavior varies based on the target `type`, it's recommended to check the `type` before using `.keys` with `.a`."
+					},
+					"response": []
+				},
+				{
+					"name": "Asserting that an object is contained",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									"response has the following structure:\r",
+									"{\r",
+									"  \"id\": \"d8893057-3e91-4cdd-a36f-a0af460b6373\",\r",
+									"  \"created\": true,\r",
+									"  \"errors\": []\r",
+									"}\r",
+									"*/\r",
+									"\r",
+									"pm.test(\"Object is contained\", () => {\r",
+									"  const expectedObject = {\r",
+									"    \"created\": true,\r",
+									"    \"errors\": []\r",
+									"  };\r",
+									"  pm.expect(pm.response.json()).to.deep.include(expectedObject);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{mockBaseUrl}}/created",
+							"host": [
+								"{{mockBaseUrl}}"
+							],
+							"path": [
+								"created"
+							]
+						},
+						"description": "You can check that an object is part of a parent object.\n\n```\n/*\nresponse has the following structure:\n{\n  \"id\": \"d8893057-3e91-4cdd-a36f-a0af460b6373\",\n  \"created\": true,\n  \"errors\": []\n}\n*/\n\npm.test(\"Object is contained\", () => {\n  const expectedObject = {\n    \"created\": true,\n    \"errors\": []\n  };\n  pm.expect(pm.response.json()).to.deep.include(expectedObject);\n});\n```\n\n> Using `.deep` causes all `.equal`, `.include`, `.members`, `.keys`, and `.property` assertions that follow in the chain to use deep equality (loose equality) instead of strict (===) equality. While the `.eql` also compares loosely, `.deep.equal` causes deep equality comparisons to also be used for any other assertions that follow in the chain, while `.eql` does not."
+					},
+					"response": [
+						{
+							"name": "Asserting that an object is contained",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{mockBaseUrl}}/created",
+									"host": [
+										"{{mockBaseUrl}}"
+									],
+									"path": [
+										"created"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\r\n  \"id\": \"d8893057-3e91-4cdd-a36f-a0af460b6373\",\r\n  \"created\": true,\r\n  \"errors\": []\r\n}"
+						}
+					]
+				}
+			],
+			"description": "Read on for some examples of common assertions you might find useful in your scripts, either as they are outlined below or by editing the detail to suit your own needs.\n\n> For a more comprehensive overview of what you can include in your assertions, refer to the [Chai Docs](https://www.chaijs.com/api/bdd/)."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "mockBaseUrl",
+			"value": "https://533c269c-fb94-4044-86e6-82273df3a022.mock.pstmn.io"
+		}
+	]
+}
