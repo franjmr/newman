@@ -1,24 +1,37 @@
-# Introduction 
-Running Postman collections on the command line with [Newman](https://www.npmjs.com/package/newman)
+# Postman Automation
+Postman collection automation example using [Newman](https://www.npmjs.com/package/newman)
 
-# Getting Started
+# Prerequisite
+- [Npm](https://github.com/coreybutler/nvm-windows)
+- [Node.js](https://nodejs.org/es/)
 
-## Install
+# Install 
 ```bash
-# Install dependencies
 npm install
 ```
-## Reporters
-- Terminal console: Default
-- Junit: Use [newman-reporter-junitfull](https://www.npmjs.com/package/newman-reporter-junitfull) as JUnit reporter for Newman that provides the information about the collection run in JUnit format. 
-## Execute Postman collection
 
+# Postman Documentation
+- [Getting Started](https://learning.postman.com/docs/getting-started/introduction/)
+- [Test Examples](https://www.postman.com/postman/workspace/test-examples-in-postman/overview)
+# Usage
+Simply include the Postman collection in a directory and call it with a script. In the script property of the "package.json" file several executions have been configured as examples:
+## Run collection file using cli reporter
 ```bash
-# Console reporter
-npm run tests:postman
+npm run test:examples:cli
 ```
-
+## Run collection file using junit reporter
 ```bash
-# JUnit reporter
-npm run tests:postman:junit
+npm run test:examples:junit
+```
+## Run ALL collections files using default reporter (cli)
+```bash
+npm run test:collections:all
+```
+## Run ALL collections files using multi reporter (cli,junit)
+```bash
+npm run test:collections:all:multireport
+```
+## Run the collections that are inside a specific directory into the parent directory of collections using cli reporter
+```bash
+npm run test:collections:examples:cli
 ```
