@@ -16,7 +16,8 @@
     "test:collections:examples": "cross-env COLLECTION_DIR=examples node collectionsRunner.js",
     "test:collections:examples:junit": "cross-env COLLECTION_DIR=examples REPORTERS=junit node collectionsRunner.js",
     "test:collections:examples:cli": "cross-env COLLECTION_DIR=examples REPORTERS=cli node collectionsRunner.js",
-    "test:collections:examples:multireport": "cross-env COLLECTION_DIR=examples REPORTERS=cli,junit node collectionsRunner.js"
+    "test:collections:examples:multireport": "cross-env COLLECTION_DIR=examples REPORTERS=cli,junit node collectionsRunner.js",
+    "test:collections:kibana:multireport": "cross-env COLLECTION_DIR=kibana REPORTERS=cli,junit node collectionsRunner.js"
   },
   "keywords": [
     "franjmr/newman"

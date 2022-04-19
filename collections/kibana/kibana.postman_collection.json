@@ -1,0 +1,618 @@
+{
+	"info": {
+		"_postman_id": "39d11a1a-b693-4724-be9a-bda9a2c26098",
+		"name": "kibana",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Cluster Health",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Cluster Health - Response Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cluster Health - Cluster Status is green\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"green\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cluster Health - Number of nodes is 13\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.number_of_nodes).to.eql(13);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cluster Health - Number of data nodes is 10\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.number_of_data_nodes).to.eql(10);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cluster Health - Unassigned Shards is 0\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.unassigned_shards).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/_cluster/health?pretty",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"_cluster",
+						"health"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Node Stats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Node Stats - Response Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Node Stats - Disk Used Percent by Node\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var diskUsedPercentExpected = 85;\r",
+							"    for (var key in jsonData) {\r",
+							"        if (jsonData[key].hasOwnProperty('disk.used_percent')) {\r",
+							"            var nodename = jsonData[key]['name'];\r",
+							"            var diskUsedPercent = jsonData[key]['disk.used_percent'];\r",
+							"            var diskUsedPercentRound = parseInt(diskUsedPercent);\r",
+							"            pm.expect(diskUsedPercentRound).to.lt(diskUsedPercentExpected, \"The disk used percent in '\"+nodename+\"' is NOT less than \"+diskUsedPercentExpected+\"%\");\r",
+							"        }\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/_cat/nodes?v=true&h=h,name,version,node.role,disk.total,disk.used,diskAvail,disk.used_percent&format=json",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"_cat",
+						"nodes"
+					],
+					"query": [
+						{
+							"key": "v",
+							"value": "true"
+						},
+						{
+							"key": "h",
+							"value": "h,name,version,node.role,disk.total,disk.used,diskAvail,disk.used_percent"
+						},
+						{
+							"key": "format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shards Stats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Shards Stats - Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Shards Stats - Should not exist UNASSIGNED shards\", function () {\r",
+							"    pm.expect(pm.response.text()).not.to.include(\"UNASSIGNED\");\r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/_cat/shards?v=true&h=index,shard,prirep,state,unassigned.reason",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"_cat",
+						"shards"
+					],
+					"query": [
+						{
+							"key": "v",
+							"value": "true"
+						},
+						{
+							"key": "h",
+							"value": "index,shard,prirep,state,unassigned.reason"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shards Allocations Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Shards allocation - Response Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Shards allocation is enabled on cluster\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.persistent.cluster.routing.rebalance.enable).to.eql(\"all\");\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/_cluster/settings",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"_cluster",
+						"settings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Index Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Index Status - Response Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Index Health - Index Status is green\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    for (var j = 0; j < jsonData.length; j++) {\r",
+							"        if (jsonData[j].hasOwnProperty('health')) {\r",
+							"            var salud = jsonData[j]['health'];\r",
+							"            var indice = jsonData[j]['index'];\r",
+							"            pm.expect(salud).to.eql(\"green\",`Index '${indice}' status is NOT green` );\r",
+							"        }        \r",
+							"    }   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Index Open - Index Status is open\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    for (var j = 0; j < jsonData.length; j++) {\r",
+							"        if (jsonData[j].hasOwnProperty('status')) {\r",
+							"            var estado = jsonData[j]['status'];\r",
+							"            var indice = jsonData[j]['index'];\r",
+							"            pm.expect(estado).to.eql(\"open\",`Index '${indice}' status is NOT open`);\r",
+							"        }        \r",
+							"    }   \r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/_cat/indices?pretty&format=json",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"_cat",
+						"indices"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						},
+						{
+							"key": "format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Index Read Only Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Index Read Only Status - Response Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"No Read Only indexes on Cluster\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    for (var key in jsonData) {\r",
+							"        var indice = jsonData[key];\r",
+							"        var index = indice.settings.index;\r",
+							"        if (index.hasOwnProperty('blocks')) {\r",
+							"            var property = index.blocks.read_only_allow_delete;\r",
+							"            pm.expect(property).to.eq(undefined,`Index '${key}' has property read_only_allow_delete `);    \r",
+							"        }\r",
+							"    }\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/_all/_settings?pretty&format=json",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"_all",
+						"_settings"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						},
+						{
+							"key": "format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Count Hits by date range - Index_01",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Count Hits by date range - Index_01 - Should count hits last 24 hours\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.hits.total).to.gt(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": {\r\n    \"range\": {\r\n      \"@timestamp\": {\r\n        \"gte\": \"now-1d/d\",\r\n        \"lt\": \"now/d\"\r\n      }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/user-actions-saas-pro*/_search?pretty",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"user-actions-saas-pro*",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Count Hits by date range - Index_02",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Count Hits by date range - Index_02 - Should count hits last 24 hours\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.hits.total).to.gt(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": {\r\n    \"range\": {\r\n      \"@timestamp\": {\r\n        \"gte\": \"now-1d/d\",\r\n        \"lt\": \"now/d\"\r\n      }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/user-actions-bpo*/_search?pretty",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"user-actions-bpo*",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Count Hits by date range - Index_03",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Count Hits by date range - Index_04 - Should count hits last 24 hours\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.hits.total).to.gt(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": {\r\n    \"range\": {\r\n      \"@timestamp\": {\r\n        \"gte\": \"now-1d/d\",\r\n        \"lt\": \"now/d\"\r\n      }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/user-actions-ltam*/_search?pretty",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"user-actions-ltam*",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Count Hits by date range - Index_04",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Count Hits by date range - Index_04 - Should count hits last 24 hours\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.hits.total).to.gt(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": {\r\n    \"range\": {\r\n      \"@timestamp\": {\r\n        \"gte\": \"now-1d/d\",\r\n        \"lt\": \"now/d\"\r\n      }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/user-actions-latam-lgc*/_search?pretty",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"user-actions-latam-lgc*",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Count Hits by date range - Index_05",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Count Hits by date range - Index_05 - Should count hits last 24 hours\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.hits.total).to.gt(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": {\r\n    \"range\": {\r\n      \"@timestamp\": {\r\n        \"gte\": \"now-1d/d\",\r\n        \"lt\": \"now/d\"\r\n      }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://kibana.meta4.com:9200/user-actions-saas-pre*/_search?pretty",
+					"protocol": "http",
+					"host": [
+						"kibana",
+						"meta4",
+						"com"
+					],
+					"port": "9200",
+					"path": [
+						"user-actions-saas-pre*",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
