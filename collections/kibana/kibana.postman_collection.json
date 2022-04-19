@@ -44,7 +44,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/_cluster/health?pretty",
+					"raw": "http://localhost:9200/_cluster/health?pretty",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -98,7 +98,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/_cat/nodes?v=true&h=h,name,version,node.role,disk.total,disk.used,diskAvail,disk.used_percent&format=json",
+					"raw": "http://localhost:9200/_cat/nodes?v=true&h=h,name,version,node.role,disk.total,disk.used,diskAvail,disk.used_percent&format=json",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -151,7 +151,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/_cat/shards?v=true&h=index,shard,prirep,state,unassigned.reason",
+					"raw": "http://localhost:9200/_cat/shards?v=true&h=index,shard,prirep,state,unassigned.reason",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -202,7 +202,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/_cluster/settings",
+					"raw": "http://localhost:9200/_cluster/settings",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -259,7 +259,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/_cat/indices?pretty&format=json",
+					"raw": "http://localhost:9200/_cat/indices?pretty&format=json",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -318,7 +318,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/_all/_settings?pretty&format=json",
+					"raw": "http://localhost:9200/_all/_settings?pretty&format=json",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -376,7 +376,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/user-actions-saas-pro*/_search?pretty",
+					"raw": "http://localhost:9200/user-actions-saas-pro*/_search?pretty",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -430,7 +430,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/user-actions-bpo*/_search?pretty",
+					"raw": "http://localhost:9200/user-actions-bpo*/_search?pretty",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -484,7 +484,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/user-actions-ltam*/_search?pretty",
+					"raw": "http://localhost:9200/user-actions-ltam*/_search?pretty",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -538,7 +538,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/user-actions-latam-lgc*/_search?pretty",
+					"raw": "http://localhost:9200/user-actions-latam-lgc*/_search?pretty",
 					"protocol": "http",
 					"host": [
 						"kibana",
@@ -592,7 +592,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://kibana.meta4.com:9200/user-actions-saas-pre*/_search?pretty",
+					"raw": "http://localhost:9200/user-actions-saas-pre*/_search?pretty",
 					"protocol": "http",
 					"host": [
 						"kibana",
